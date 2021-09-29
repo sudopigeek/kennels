@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCustomers } from '../../modules/CustomerManager';
+import { getAllCustomers, removeCustomer } from '../../modules/CustomerManager';
 import { CustomerCard } from './CustomerCard';
 
 export const CustomerList = () => {
@@ -14,6 +14,11 @@ export const CustomerList = () => {
         });
     };
 
+    const handleRemoveCustomer = id => {
+        removeCustomer(id)
+        .then(() => getAllCustomers().then(setCustomers));
+    };
+
     // got the customers from the API on the component's first render
     useEffect(() => {
         getCustomers();
@@ -22,7 +27,7 @@ export const CustomerList = () => {
     // Finally we use .map() to "loop over" the customers array to show a list of customer cards
     return (
         <div className="container-cards">
-            {customers.map(customer => <CustomerCard key={customer.id} customer={customer} />)}
+            {customers.map(customer => <CustomerCard key={customer.id} customer={customer} handleRemoveCustomer={handleRemoveCustomer} />)}
         </div>
     );
 };

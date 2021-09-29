@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllEmployees } from '../../modules/EmployeeManager';
+import { getAllEmployees, terminateEmployee } from '../../modules/EmployeeManager';
 import { EmployeeCard } from './EmployeeCard';
 
 export const EmployeeList = () => {
@@ -14,6 +14,11 @@ export const EmployeeList = () => {
         });
     };
 
+    const handleTerminateEmployee = id => {
+        terminateEmployee(id)
+        .then(() => getAllEmployees().then(setEmployees));
+    };
+
     // got the employees from the API on the component's first render
     useEffect(() => {
         getEmployees();
@@ -22,7 +27,7 @@ export const EmployeeList = () => {
     // Finally we use .map() to "loop over" the employees array to show a list of employee cards
     return (
         <div className="container-cards">
-            {employees.map(employee => <EmployeeCard key={employee.id} employee={employee} />)}
+            {employees.map(employee => <EmployeeCard key={employee.id} employee={employee} handleTerminateEmployee={handleTerminateEmployee} />)}
         </div>
     );
 };
